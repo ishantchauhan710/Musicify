@@ -13,7 +13,7 @@ class MusicDatabase {
     // Metadata will also have song URL and song thumbnail URL.
     suspend fun getAllSongs(): List<Song> {
         return try {
-            songCollection.get().await().toObjects(Song::class.java)
+            songCollection.get().await().toObjects(Song::class.java) // The Query Snapshot received is converted to our Song class
         } catch(e: Exception) {
             emptyList()
         }
