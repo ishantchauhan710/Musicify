@@ -7,6 +7,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.ishant.musicify.data.remote.MusicDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,4 +39,9 @@ class ServiceModule {
     // This function will provide us an Exoplayer Default Data Source Factory that consists of a user agent which will be used for requesting remote data
     fun provideDataSourceFactory(@ApplicationContext context: Context) = DefaultDataSourceFactory(context,
         Util.getUserAgent(context,"Musicify"))
+
+    @ServiceScoped
+    @Provides
+    // This function will provide us an instance of our MusicDatabase class
+    fun provideMusicDatabase() = MusicDatabase()
 }
