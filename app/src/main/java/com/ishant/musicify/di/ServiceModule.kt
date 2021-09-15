@@ -3,6 +3,7 @@ package com.ishant.musicify.di
 import android.content.Context
 import androidx.core.app.ServiceCompat
 import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -22,6 +23,15 @@ class ServiceModule {
         .setContentType(C.CONTENT_TYPE_MUSIC)
         .setUsage(C.USAGE_MEDIA)
         .build()
+
+    @ServiceScoped
+    @Provides
+    // This function will provide us an instance of Exoplayer
+    fun provideExoPlayer(@ApplicationContext context: Context, audioAttributes: AudioAttributes) =
+        SimpleExoPlayer.Builder(context).build().apply {
+            setAudioAttributes(audioAttributes,true)
+            setHandleAudioBecomingNoisy(true) // It will pause the audio whenever earphones are either plugged in or plugged out
+        }
 
     @ServiceScoped
     @Provides
