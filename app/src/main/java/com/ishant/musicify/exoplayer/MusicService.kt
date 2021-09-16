@@ -16,6 +16,7 @@ import com.ishant.musicify.exoplayer.callbacks.MusicNotificationListener
 import com.ishant.musicify.exoplayer.callbacks.MusicPlaybackPreparer
 import com.ishant.musicify.exoplayer.callbacks.MusicPlayerEventListener
 import com.ishant.musicify.other.Constants.MEDIA_ROOT_ID
+import com.ishant.musicify.other.Constants.NETWORK_ERROR
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -157,6 +158,8 @@ class MusicService: MediaBrowserServiceCompat() {
                         preparePlayer(firebaseMusicSource.songs,firebaseMusicSource.songs[0],false)
                         isPlayerInitialized = true
                     } else {
+                        // Tell our media session that there is some network error
+                        mediaSession.sendSessionEvent(NETWORK_ERROR,null)
                         // Else we send data as null
                         result.sendResult(null)
                     }

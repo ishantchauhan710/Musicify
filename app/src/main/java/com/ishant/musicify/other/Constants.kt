@@ -5,5 +5,6 @@ object Constants {
     const val SONG_COLLECTION = "songs"
     const val NOTIFICATION_CHANNEL_ID = "musicify"
     const val NOTIFICATION_ID = 1
-    val MEDIA_ROOT_ID = "root_id"
+    const val MEDIA_ROOT_ID = "root_id"
+    const val NETWORK_ERROR = "NETWORK_ERROR"
 }
