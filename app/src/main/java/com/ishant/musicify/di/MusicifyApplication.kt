@@ -1,4 +1,4 @@
-package com.ishant.musicify
+package com.ishant.musicify.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

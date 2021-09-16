@@ -14,7 +14,7 @@ import com.ishant.musicify.other.Constants.NETWORK_ERROR
 import com.ishant.musicify.other.Event
 import com.ishant.musicify.other.Resource
 
-// This class will connect our service with viewmodel
+// This class will connect our service with ViewModel
 class MusicServiceConnection(context: Context) {
     private val _isConnected = MutableLiveData<Event<Resource<Boolean>>>()
     val isConnected: LiveData<Event<Resource<Boolean>>> = _isConnected

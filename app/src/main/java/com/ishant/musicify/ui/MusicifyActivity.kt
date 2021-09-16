@@ -1,7 +1,8 @@
-package com.ishant.musicify
+package com.ishant.musicify.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.ishant.musicify.R
 
 class MusicifyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
