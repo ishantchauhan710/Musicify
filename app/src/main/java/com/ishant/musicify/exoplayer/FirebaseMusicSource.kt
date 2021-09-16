@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 /*
 It takes some time to get music from firebase to our app. And in a service it would be difficult to implement waiting functionality
-as some songs will load faster while others will load slow depending upon the size. Therefore we implemented a mechanism using enum
+as some songs will load faster while others will load slow depending upon the size. Therefore we implemented a mechanism using this enum
 class. It will have 4 states of our song request.
 */
 enum class State {

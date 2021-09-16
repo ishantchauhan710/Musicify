@@ -5,6 +5,7 @@ import com.ishant.musicify.data.entities.Song
 import com.ishant.musicify.other.Constants.SONG_COLLECTION
 import kotlinx.coroutines.tasks.await
 
+// This database will extract all the songs in metadata form from our firebase database
 class MusicDatabase {
     private val firestore = FirebaseFirestore.getInstance()
     private val songCollection = firestore.collection(SONG_COLLECTION) // It is name of our collection in firestore database

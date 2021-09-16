@@ -16,7 +16,8 @@ import dagger.hilt.android.scopes.ServiceScoped
 
 @Module
 @InstallIn(ServiceCompat::class) // This module will live as long as our service does
-class ServiceModule {
+// In this object we define all the modules or instances that we need in our service
+object ServiceModule {
     @ServiceScoped // You cannot use @Singleton in a service so you need to use @ServiceScoped which will create only one instance of our function
     @Provides
     // This function will provide us Exoplayer Audio Attributes that include Music Content Type and Media as Usage

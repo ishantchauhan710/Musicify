@@ -8,6 +8,7 @@ import androidx.media.MediaBrowserServiceCompat
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.ishant.musicify.exoplayer.callbacks.MusicNotificationListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ import javax.inject.Inject
 private const val SERVICE_TAG = "MusicService"
 
 @AndroidEntryPoint
+// This is our Music Service class that will play the music and display the notification even when our app is minimized or screen is turned off
 class MusicService: MediaBrowserServiceCompat() {
 
     @Inject // This annotation is used to call or inject something from modules that we created (AppModule or ServiceModule)
@@ -33,6 +35,10 @@ class MusicService: MediaBrowserServiceCompat() {
     private lateinit var mediaSession: MediaSessionCompat // It is a media session that will be activated when media is played
 
     private lateinit var mediaSessionConnector: MediaSessionConnector // It will connect our media session to exoplayer
+
+    private lateinit var musicNotificationManager: MusicNotificationManager // Notification Manager declared in our service
+
+    var isForegroundService = false // Set service running to false initially
 
     override fun onCreate() {
         super.onCreate()
@@ -56,6 +62,11 @@ class MusicService: MediaBrowserServiceCompat() {
 
         // Our media session is finally connected to exoplayer
         mediaSessionConnector.setPlayer(exoPlayer)
+
+        // Create the Notification Manager in our service class
+        musicNotificationManager = MusicNotificationManager(
+            this,mediaSession.sessionToken,MusicNotificationListener(this)
+        ) { }
 
     }
 
