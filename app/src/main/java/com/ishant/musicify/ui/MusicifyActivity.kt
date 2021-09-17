@@ -1,14 +1,23 @@
 package com.ishant.musicify.ui
 
+import android.media.session.PlaybackState
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
+import com.google.android.material.snackbar.Snackbar
 import com.ishant.musicify.R
 import com.ishant.musicify.adapters.SwipeSongAdapter
 import com.ishant.musicify.data.entities.Song
 import com.ishant.musicify.databinding.ActivityMusicifyBinding
+import com.ishant.musicify.exoplayer.isPlayEnabled
+import com.ishant.musicify.exoplayer.isPlaying
+import com.ishant.musicify.exoplayer.isPrepared
 import com.ishant.musicify.exoplayer.toSong
 import com.ishant.musicify.other.Status
 import com.ishant.musicify.ui.viewmodels.MainViewModel
@@ -29,6 +38,8 @@ class MusicifyActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicifyBinding
 
+    private var playbackState: PlaybackStateCompat ?= null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicifyBinding.inflate(LayoutInflater.from(this))
@@ -37,7 +48,27 @@ class MusicifyActivity : AppCompatActivity() {
         swipeSongAdapter = SwipeSongAdapter(glide)
 
         subscribeToObservers()
+
         binding.vpSong.adapter = swipeSongAdapter
+
+        binding.ivPlayPause.setOnClickListener {
+            //Toast.makeText(this, "isPlaying: ${playbackState?.isPlaying} | isPlayEnabled: ${playbackState?.isPlayEnabled} | isPrepared: ${playbackState?.isPrepared}", Toast.LENGTH_SHORT).show()
+            curPlayingSong?.let {
+                mainViewModel.playOrToggleSong(it,true)
+            }
+
+        }
+
+        binding.vpSong.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if(playbackState?.isPlaying==true) {
+                    mainViewModel.playOrToggleSong(swipeSongAdapter.songs[position])
+                } else {
+                    curPlayingSong = swipeSongAdapter.songs[position]
+                }
+            }
+        })
 
     }
 
@@ -74,12 +105,41 @@ class MusicifyActivity : AppCompatActivity() {
         // Information about currently playing song in MediaMetadataCompat format
         mainViewModel.curPlayingSong.observe(this) {
             if(it==null) return@observe
-
             curPlayingSong = it.toSong() // MediaMetadataCompat converted to our Song.kt class format using the extension function we created in MediaMetadataCompat.kt
             glide.load(curPlayingSong?.imageUrl).into(binding.ivCurSongImage)
             switchViewPagerToCurrentSong(curPlayingSong?:return@observe)
-
         }
+
+        // Play / Pause state of our song
+        mainViewModel.playbackState.observe(this) {
+            playbackState = it
+            binding.ivPlayPause.setImageResource(
+                    if (playbackState?.isPlaying == true) R.drawable.ic_play else R.drawable.ic_pause
+            )
+        }
+
+        // Check whether media browser is connected or not
+        mainViewModel.isConnected.observe(this) {
+            it?.getContentIfNotHandled()?.let { result->
+                when(result.status) {
+                    Status.ERROR -> Toast.makeText(this,"An unknown error occurred",Toast.LENGTH_SHORT).show()
+                    else -> Unit
+                }
+            }
+        }
+
+        // Check whether internet is connected or not
+        mainViewModel.networkError.observe(this) {
+            it?.getContentIfNotHandled()?.let { result->
+                when(result.status) {
+                    Status.ERROR -> Toast.makeText(this,"Error: Please check your internet connection",Toast.LENGTH_SHORT).show()
+                    else -> Unit
+                }
+            }
+        }
+
+
+
 
     }
 

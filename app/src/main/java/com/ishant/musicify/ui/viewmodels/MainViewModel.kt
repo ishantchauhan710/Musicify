@@ -85,8 +85,10 @@ class MainViewModel @ViewModelInject constructor(
         if(isPrepared && mediaItem.mediaId==curPlayingSong.value?.getString(METADATA_KEY_MEDIA_ID)) {
             playbackState.value?.let { playbackState ->
                 when {
-                    playbackState.isPlaying -> if(toggle) musicServiceConnection.transportControls.pause()
-                    playbackState.isPlayEnabled -> musicServiceConnection.transportControls.play()
+                    // (Currently I fixed it somehow, i don't know why this happens)
+                    // .isPlaying should have -> .pause() and .isPlayEnabled should have -> .play()
+                    playbackState.isPlaying -> if(toggle) musicServiceConnection.transportControls.play()
+                    playbackState.isPlayEnabled -> musicServiceConnection.transportControls.pause()
                     else -> Unit
                 }
             }
