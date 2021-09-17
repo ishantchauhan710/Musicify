@@ -18,8 +18,8 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton // It will have only one instance
     @Provides // Each module function needs to have @Provides annotation
-    // This function will provide us an instance of Glide() which is an image loading library
     fun provideGlideInstance(@ApplicationContext context: Context) =
+        // This function will provide us an instance of Glide() which is an image loading library
         Glide.with(context).setDefaultRequestOptions(RequestOptions()
              .placeholder(R.drawable.ic_image)
              .error(R.drawable.ic_image).diskCacheStrategy(DiskCacheStrategy.DATA))

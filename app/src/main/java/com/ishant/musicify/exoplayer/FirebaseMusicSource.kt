@@ -83,7 +83,7 @@ class FirebaseMusicSource @Inject constructor(private val musicDatabase: MusicDa
 
         // This is a playable media item from song object
         MediaBrowserCompat.MediaItem(desc,FLAG_PLAYABLE)
-    }
+    }.toMutableList()
 
     // This is kind of lambda expression. It will take a list of boolean variables and return a unit or nothing
     private val onReadyListener = mutableListOf<(Boolean)->Unit>()

@@ -1,7 +1,9 @@
 package com.ishant.musicify.ui.viewmodels
 
+import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat.METADATA_KEY_MEDIA_ID
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +18,7 @@ import com.ishant.musicify.other.Resource
 
 // In this class, we will implement UI related functions such as when to play, pause, skip etc
 class MainViewModel @ViewModelInject constructor(
-    private val musicServiceConnection: MusicServiceConnection
+    val musicServiceConnection: MusicServiceConnection
 ): ViewModel() {
     // Currently it is an empty list of songs (Live Data)
     private val _mediaItems = MutableLiveData<Resource<List<Song>>>()
@@ -34,13 +36,19 @@ class MainViewModel @ViewModelInject constructor(
 
         // We subscribe or start the service that we passed in constructor of this class
         musicServiceConnection.subscribe(MEDIA_ROOT_ID, object: MediaBrowserCompat.SubscriptionCallback() {
+
+            override fun onError(parentId: String) {
+                super.onError(parentId)
+                Log.e("IshantChauhan","Subscription Error: Parent ID is $parentId")
+            }
+
             override fun onChildrenLoaded(
                 parentId: String,
                 children: MutableList<MediaBrowserCompat.MediaItem>
             ) {
+                Log.e("IshantChauhan","OnChildrenLoaded called")
                 super.onChildrenLoaded(parentId, children)
-
-                // When the songs in MediaBrowserCompat are loaded, we get each of the song and map it to a Song.kt class's object.
+               // When the songs in MediaBrowserCompat are loaded, we get each of the song and map it to a Song.kt class's object.
                 val items = children.map {
                     Song(it.mediaId!!,it.description.title.toString(),it.description.subtitle.toString(),it.description.mediaUri.toString(),it.description.iconUri.toString())
                 }

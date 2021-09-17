@@ -2,4 +2,6 @@
     <string name="app_name">Musicify</string>
     <string name="notification_channel">Music Channel</string>
     <string name="notification_channel_description">Shows the currently playing music</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

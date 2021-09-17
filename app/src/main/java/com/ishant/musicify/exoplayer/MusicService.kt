@@ -24,8 +24,8 @@ import javax.inject.Inject
 private const val SERVICE_TAG = "MusicService"
 
 @AndroidEntryPoint
-// This is our Music Service class that will play the music and display the notification even when our app is minimized or screen is turned off
 class MusicService: MediaBrowserServiceCompat() {
+// This is our Music Service class that will play the music and display the notification even when our app is minimized or screen is turned off
 
     @Inject
     lateinit var firebaseMusicSource: FirebaseMusicSource
@@ -145,6 +145,13 @@ class MusicService: MediaBrowserServiceCompat() {
         return BrowserRoot(MEDIA_ROOT_ID,null)
     }
 
+    // We get the description of currently playing song
+    private inner class MusicQueueNavigator: TimelineQueueNavigator(mediaSession) {
+        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
+            return firebaseMusicSource.songs[windowIndex].description
+        }
+    }
+
     // This function will load all songs in the root
     override fun onLoadChildren(
         parentId: String,
@@ -153,17 +160,22 @@ class MusicService: MediaBrowserServiceCompat() {
         when(parentId) {
             MEDIA_ROOT_ID -> {
                 val resultsSent = firebaseMusicSource.whenReady { isInitialized ->
-                    // When firebaseMusicSource has successfully loaded all data and the data is not empty, we prepare the exoPlayer with first song and initially we don't play it. We want user to play it when the song is clicked.
-                    if(isPlayerInitialized && firebaseMusicSource.songs.isNotEmpty()) {
-                        preparePlayer(firebaseMusicSource.songs,firebaseMusicSource.songs[0],false)
-                        isPlayerInitialized = true
+
+                    if(isInitialized) {
+                        result.sendResult(firebaseMusicSource.asMediaItem())
+                            // When firebaseMusicSource has successfully loaded all data and the data is not empty, we prepare the exoPlayer with first song and initially we don't play it. We want user to play it when the song is clicked.
+                            if(isPlayerInitialized && firebaseMusicSource.songs.isNotEmpty()) {
+                                preparePlayer(firebaseMusicSource.songs,firebaseMusicSource.songs[0],false)
+                                isPlayerInitialized = true
+                            }
                     } else {
-                        // Tell our media session that there is some network error
-                        mediaSession.sendSessionEvent(NETWORK_ERROR,null)
-                        // Else we send data as null
-                        result.sendResult(null)
-                    }
+                            // Tell our media session that there is some network error
+                            mediaSession.sendSessionEvent(NETWORK_ERROR,null)
+                            // Else we send data as null
+                            result.sendResult(null)
+                        }
                 }
+
                 if(!resultsSent) {
                     // If no results are sent, that means no data is there so end this function
                     result.detach()
@@ -172,11 +184,5 @@ class MusicService: MediaBrowserServiceCompat() {
         }
     }
 
-    // We get the description of currently playing song
-    private inner class MusicQueueNavigator: TimelineQueueNavigator(mediaSession) {
-        override fun getMediaDescription(player: Player, windowIndex: Int): MediaDescriptionCompat {
-            return firebaseMusicSource.songs[windowIndex].description
-        }
-    }
 
 }

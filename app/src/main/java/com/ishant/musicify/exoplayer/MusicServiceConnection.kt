@@ -8,14 +8,17 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ishant.musicify.other.Constants.NETWORK_ERROR
 import com.ishant.musicify.other.Event
 import com.ishant.musicify.other.Resource
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 // This class will connect our service with ViewModel
-class MusicServiceConnection(context: Context) {
+class MusicServiceConnection @Inject constructor(@ApplicationContext context: Context) {
     private val _isConnected = MutableLiveData<Event<Resource<Boolean>>>()
     val isConnected: LiveData<Event<Resource<Boolean>>> = _isConnected
 
@@ -36,7 +39,13 @@ class MusicServiceConnection(context: Context) {
 
     // This will let us play the music through our service by establishing a network connection with songs and will work according to the network callback we have assigned to it
     private val mediaBrowser = MediaBrowserCompat(context, ComponentName(context, MusicService::class.java),
-        mediaBrowserConnectionCallback, null).apply { connect() }
+        mediaBrowserConnectionCallback, null).apply {
+            connect()
+            Log.e("IshantChauhan","Media Browser Connected")
+
+    }
+
+
 
     // This will help us transport or change controls from one song to another
     val transportControls: MediaControllerCompat.TransportControls
@@ -45,6 +54,7 @@ class MusicServiceConnection(context: Context) {
     // Function to start our service connection through media browser
     fun subscribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback) {
         mediaBrowser.subscribe(parentId,callback)
+        Log.e("IshantChauhan","MusicServiceConnection.kt subscribe() function called")
     }
 
     // Function to end our service connection through media browser
