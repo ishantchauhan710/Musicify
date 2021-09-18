@@ -53,6 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     binding.allSongsProgressBar.visibility = View.GONE
                     result.data?.let { songs ->
                         songAdapter.songs = songs
+                        binding.tvTotalSongs.text = "${songs.size} Songs"
                     }
                 }
             }

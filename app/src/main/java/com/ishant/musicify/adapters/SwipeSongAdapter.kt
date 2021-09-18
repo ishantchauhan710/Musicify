@@ -43,6 +43,7 @@ class SwipeSongAdapter @Inject constructor(private val glide: RequestManager): R
         val song = songs[position]
         val songText = "${song.title} - ${song.subtitle}"
         holder.binding.tvPrimary.text = songText
+        holder.binding.tvPrimary.isSelected = true
 
         holder.binding.root.setOnClickListener {
             onItemClickListener?.let { click ->
