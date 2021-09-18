@@ -8,6 +8,8 @@ import com.ishant.musicify.exoplayer.MusicService
 import com.ishant.musicify.exoplayer.MusicServiceConnection
 import com.ishant.musicify.exoplayer.currentPlaybackPosition
 import com.ishant.musicify.other.Constants.UPDATE_PLAYER_POSITION_INTERVAL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,12 +30,12 @@ class SongViewModel @ViewModelInject constructor(val musicServiceConnection: Mus
     private fun updateCurrentPlayerPosition() {
         viewModelScope.launch {
             while(true) {
-                val pos = playbackState.value?.currentPlaybackPosition // Extension variable we created in PlaybackStateCompatExt.kt
-                if(curPlayerPosition.value!=pos) {
+                val pos = playbackState.value?.currentPlaybackPosition
+                if(curPlayerPosition.value != pos) {
                     _curPlayerPosition.postValue(pos)
                     _curSongDuration.postValue(MusicService.curSongDuration)
-                    delay(UPDATE_PLAYER_POSITION_INTERVAL)
                 }
+                delay(UPDATE_PLAYER_POSITION_INTERVAL)
             }
         }
     }

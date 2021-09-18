@@ -49,6 +49,7 @@ class MusicNotificationManager(
     // This adapter will manage the data of song such as title, icon, intent etc
     private inner class DescriptionAdapter(private val mediaController: MediaControllerCompat): PlayerNotificationManager.MediaDescriptionAdapter {
         override fun getCurrentContentTitle(player: Player): CharSequence {
+            newSongCallback()
             return mediaController.metadata.description.title.toString()
         }
 

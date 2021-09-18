@@ -10,4 +10,15 @@
         android:name="com.ishant.musicify.ui.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/songFragment"
+        android:name="com.ishant.musicify.ui.fragments.SongFragment"
+        android:label="fragment_song"
+        tools:layout="@layout/fragment_song" />
+
+    <action
+        android:id="@+id/globalActionToSongFragment"
+        app:destination="@id/songFragment" />
+
 </navigation>

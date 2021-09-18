@@ -86,7 +86,9 @@ class MusicService: MediaBrowserServiceCompat() {
         // Create the Notification Manager in our service class
         musicNotificationManager = MusicNotificationManager(
             this,mediaSession.sessionToken,MusicNotificationListener(this)
-        ) { }
+        ) {
+            curSongDuration = exoPlayer.duration
+        }
 
         // This is the callback we created. It will take the firebase object and return the song user wants to play and set curPlayingSong to the song that is returned
         val musicPlaybackPreparer = MusicPlaybackPreparer(firebaseMusicSource) {

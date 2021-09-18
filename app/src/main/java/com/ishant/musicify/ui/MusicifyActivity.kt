@@ -8,6 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
@@ -70,6 +75,21 @@ class MusicifyActivity : AppCompatActivity() {
             }
         })
 
+        val navController = findNavController(R.id.navHostFragment)
+
+        swipeSongAdapter.setOnItemClickListener {
+            navController.navigate(R.id.globalActionToSongFragment)
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when(destination.id) {
+                R.id.songFragment -> hideBottomBar()
+                R.id.homeFragment -> showBottomBar()
+                else -> showBottomBar()
+            }
+        }
+
+
     }
 
     // It will set viewpager to current playing song
@@ -114,7 +134,7 @@ class MusicifyActivity : AppCompatActivity() {
         mainViewModel.playbackState.observe(this) {
             playbackState = it
             binding.ivPlayPause.setImageResource(
-                    if (playbackState?.isPlaying == true) R.drawable.ic_play else R.drawable.ic_pause
+                    if (playbackState?.isPlaying == true) R.drawable.ic_pause else R.drawable.ic_play
             )
         }
 
@@ -138,9 +158,20 @@ class MusicifyActivity : AppCompatActivity() {
             }
         }
 
-
-
-
     }
+
+    private fun hideBottomBar() {
+        binding.ivCurSongImage.isVisible = false
+        binding.vpSong.isVisible = false
+        binding.ivPlayPause.isVisible = false
+    }
+
+    private fun showBottomBar() {
+        binding.ivCurSongImage.isVisible = true
+        binding.vpSong.isVisible = true
+        binding.ivPlayPause.isVisible = true
+    }
+
+
 
 }
