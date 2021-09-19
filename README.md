@@ -40,7 +40,7 @@ Before we get started, you need to add the following dependencies to your build.
 
 I have used MVVM architecture in this app. The flow of the app is as follows:
 
-1. MusicService.kt
+1. MusicService.kt<br>
 This file contains functions to create the notification, prepare the exoplayer and create the music service.
 
 2. MusicServiceConnection.kt<br>
@@ -107,7 +107,7 @@ In firebase storage, I have uploaded all the songs .mp3 files along with their t
 <img src="storage.PNG" alt="drawing" width="600"/>
 
 In firebase database, I have stored meta data of all the songs including their firebase storage's song url and thumbnail image url.<br />
-<img src="storage.PNG" alt="drawing" width="600"/><br>
+<img src="database.PNG" alt="drawing" width="600"/><br>
 
 
 ## Contact
