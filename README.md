@@ -20,7 +20,7 @@ Below I have explained the flow of app. Moreover, I have also commented what I a
 
 ### Project Setup
 #### Adding Dependencies
-Before we get started, you need to add the following dependencies to your build.gradle app
+Before we get started, we need to add the following dependencies to your build.gradle app
 
 * [Coroutines](https://developer.android.com/kotlin/coroutines) - Coroutines are used to perform two or more tasks parallely or asynchronously. They are very useful when you need to load data from cloud into your app.
 * [Firebase Storage KTX](https://firebase.google.com/docs/storage) - For storing songs and their thumbnail images, I have used firebase storage. This storage is free for non commercial projects and can be easily used in your app without the need to create any API.
